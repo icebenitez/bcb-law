@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Blog from "./blog.client";
 
 export default function BlogPage() {
