@@ -16,7 +16,9 @@ export default function BlogPage() {
           </div>
         </div>
 
-        <Blog />
+        <Suspense>
+          <Blog />
+        </Suspense>
       </div>
     </div>
   );
