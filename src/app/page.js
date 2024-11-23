@@ -37,7 +37,7 @@ export default function LegalCounselLandingPage() {
               </div>
             </div>
             <div
-              className="container flex flex-col gap-10 px-4 py-10"
+              className="container flex flex-col gap-10 px-4 py-10 scroll-mt-6"
               id="services"
             >
               <div className="flex flex-col gap-4">
@@ -72,7 +72,7 @@ export default function LegalCounselLandingPage() {
               </div>
             </div>
             <h2
-              className="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-[#111418]"
+              className="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-[#111418] scroll-mt-14"
               id="team"
             >
               Meet our team
