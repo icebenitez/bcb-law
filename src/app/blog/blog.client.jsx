@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
 import { useQueryState } from "nuqs";
+import Link from "next/link";
 
 const categories = [
   "All",
@@ -26,6 +27,7 @@ const featuredArticles = [
     readTime: "5 min read",
     image:
       "https://cdn.usegalileo.ai/stability/6a8f0a48-88b1-4f86-9b31-44cd49b29b86.png",
+    category: "Intellectual Property",
   },
   {
     title: "A guide to understanding the new data privacy laws in California",
@@ -34,6 +36,7 @@ const featuredArticles = [
     readTime: "6 min read",
     image:
       "https://cdn.usegalileo.ai/stability/65d853c9-7453-4417-9c13-4c1d5976c093.png",
+    category: "Data Privacy",
   },
   {
     title:
@@ -43,6 +46,7 @@ const featuredArticles = [
     readTime: "4 min read",
     image:
       "https://cdn.usegalileo.ai/stability/92aeb66b-0d2f-4d23-bc66-fcc0a277c949.png",
+    category: "Tax Law",
   },
   {
     title: "What founders need to know about equity compensation for employees",
@@ -51,6 +55,7 @@ const featuredArticles = [
     readTime: "5 min read",
     image:
       "https://cdn.usegalileo.ai/stability/d409e97c-bd3b-4c89-8af5-5eaa30be39ac.png",
+    category: "Employment Law",
   },
 ];
 
@@ -63,6 +68,7 @@ const recentPosts = [
     readTime: "5 min read",
     image:
       "https://cdn.usegalileo.ai/stability/038248bc-7095-42b2-8104-aba7f3a7641d.png",
+    category: "Intellectual Property",
   },
   {
     title: "A guide to understanding the new data privacy laws in California",
@@ -71,6 +77,7 @@ const recentPosts = [
     readTime: "6 min read",
     image:
       "https://cdn.usegalileo.ai/stability/581d40ad-c015-47a6-9371-f49e8e7362c5.png",
+    category: "Data Privacy",
   },
   {
     title:
@@ -80,6 +87,7 @@ const recentPosts = [
     readTime: "4 min read",
     image:
       "https://cdn.usegalileo.ai/stability/4ef14268-fa40-4e69-ac04-433581376684.png",
+    category: "Tax Law",
   },
   {
     title: "What founders need to know about equity compensation for employees",
@@ -88,11 +96,28 @@ const recentPosts = [
     readTime: "5 min read",
     image:
       "https://cdn.usegalileo.ai/stability/5ce82859-c285-4965-a7d4-74638900251f.png",
+    category: "Employment Law",
   },
 ];
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useQueryState("category");
+  const [postSearchQuery, setPostSearchQuery] = useState("");
+
+  const filteredBlogs = featuredArticles.filter((blog) => {
+    // Filter by category
+    const categoryMatches =
+      !selectedCategory || blog.category === selectedCategory;
+
+    // Filter by search query
+    const searchMatches =
+      !postSearchQuery ||
+      blog.title.toLowerCase().includes(postSearchQuery.toLowerCase()) ||
+      blog.author.toLowerCase().includes(postSearchQuery.toLowerCase());
+
+    // Combine both filters
+    return categoryMatches && searchMatches;
+  });
 
   // useEffect(() => {
   //   console.log("selectedCategory :>> ", selectedCategory);
@@ -125,6 +150,8 @@ const Blog = () => {
               <MagnifyingGlassIcon className="h-6 w-6" />
             </div>
             <input
+              onChange={(e) => setPostSearchQuery(e.currentTarget.value)}
+              value={postSearchQuery}
               placeholder="Search legal insights"
               className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-[#141414] focus:outline-none focus:ring-0 border-none bg-[#F4F4F4] focus:border-none h-full placeholder:text-neutral-500 px-4 text-base font-normal leading-normal"
             />
@@ -149,7 +176,7 @@ const Blog = () => {
       </div>
 
       <div className="space-y-4 p-4">
-        {featuredArticles.map((article, index) => (
+        {filteredBlogs.map((article, index) => (
           <div
             key={index}
             className="flex flex-col sm:flex-row items-stretch justify-between gap-4 rounded-lg"
@@ -163,9 +190,11 @@ const Blog = () => {
                   By {article.author}, {article.date} · {article.readTime}
                 </p>
               </div>
-              <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 flex-row-reverse bg-[#F4F4F4] text-[#141414] text-sm font-medium leading-normal w-fit">
-                <span className="truncate">Read More</span>
-              </button>
+              <Link href={`/blog/${article.title}`}>
+                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 flex-row-reverse bg-[#F4F4F4] text-[#141414] text-sm font-medium leading-normal w-fit">
+                  <span className="truncate">Read More</span>
+                </button>
+              </Link>
             </div>
             <div
               className="w-full sm:w-1/3 aspect-video bg-cover bg-center bg-no-repeat rounded-lg"

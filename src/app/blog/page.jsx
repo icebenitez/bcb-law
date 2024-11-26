@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Blog from "./blog.client";
 
-export default function BlogPage() {
+export default function BlogsPage() {
   return (
     <div className="flex flex-1 justify-center py-5 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col max-w-[960px] w-full">
