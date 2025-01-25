@@ -1,19 +1,5 @@
-'use client'
-
-import { useState } from 'react'
 import Button from "@/components/button"
 import Image from 'next/image'
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-// import { Textarea } from "@/components/ui/textarea"
-// import { Separator } from "@/components/ui/separator"
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card"
-// import { CalendarIcon, Clock, MessageSquare, Share2, ThumbsUp } from 'lucide-react'
 
 // Sample post data
 const post = {
@@ -86,49 +72,43 @@ const comments = [
   }
 ]
 
-export default function BlogPostDetail() {
-  const [newComment, setNewComment] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleSubmitComment = async () => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setNewComment("")
-    setIsSubmitting(false)
-  }
-
-  const CommentComponent = ({ comment, isReply = false }) => (
-    <div className={`flex gap-4 ${isReply ? 'ml-12 mt-4' : 'mt-6'}`}>
-      {/* <Avatar className="h-10 w-10">
-        <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
-        <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
-      </Avatar> */}
-      <div className="flex-1">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold">{comment.author.name}</span>
-          <span className="text-sm text-muted-foreground">{comment.timestamp}</span>
-        </div>
-        <p className="mt-1 text-sm">{comment.content}</p>
-        <div className="mt-2 flex gap-4">
-          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-            {/* <ThumbsUp className="h-4 w-4" /> */}
-            <Image src="/thumbs-up.svg" width={16} height={16} alt="Thumbs up" />
-            {comment.likes}
-          </button>
-          <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
-            {/* <MessageSquare className="h-4 w-4" /> */}
-            <Image src="/chat-bubble.svg" width={16} height={16} alt="Chat bubble" />
-            Reply
-          </button>
-        </div>
-        {comment.replies.map(reply => (
-          <CommentComponent key={reply.id} comment={reply} isReply />
-        ))}
+const CommentComponent = ({ comment, isReply = false }) => (
+  <div className={`flex gap-4 ${isReply ? 'ml-12 mt-4' : 'mt-6'}`}>
+    {/* <Avatar className="h-10 w-10">
+      <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
+      <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
+    </Avatar> */}
+    <div className="flex-1">
+      <div className="flex items-center gap-2">
+        <span className="font-semibold">{comment.author.name}</span>
+        <span className="text-sm text-muted-foreground">{comment.timestamp}</span>
       </div>
+      <p className="mt-1 text-sm">{comment.content}</p>
+      <div className="mt-2 flex gap-4">
+        <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+          {/* <ThumbsUp className="h-4 w-4" /> */}
+          <Image src="/thumbs-up.svg" width={16} height={16} alt="Thumbs up" />
+          {comment.likes}
+        </button>
+        <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
+          {/* <MessageSquare className="h-4 w-4" /> */}
+          <Image src="/chat-bubble.svg" width={16} height={16} alt="Chat bubble" />
+          Reply
+        </button>
+      </div>
+      {comment.replies.map(reply => (
+        <CommentComponent key={reply.id} comment={reply} isReply />
+      ))}
     </div>
-  )
+  </div>
+)
+
+export default function BlogPostDetail() {
+  const handleSubmitComment = async (formData) => {
+    'use server';
+    const comment = formData.get('comment')
+    console.log('comment', comment)
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -207,27 +187,24 @@ export default function BlogPostDetail() {
             <h2 className="mb-6 text-2xl font-bold">Comments</h2>
 
             {/* Comment Form */}
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Leave a comment</CardTitle>
-                <CardDescription>
-                  Share your thoughts on this article
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmitComment}>
-                  <Textarea
+            <div className="border border-neutral-200 rounded-lg p-6 mb-8">
+              {/* <CardHeader> */}
+                <div className="mb-6">
+                  <h3 className="font-bold text-2xl">Leave a comment</h3>
+                  <p>Share your thoughts on this article</p>
+                </div>
+              {/* </CardHeader> */}
+                <form action={handleSubmitComment} >
+                  <textarea
+                    name="comment"
                     placeholder="Write your comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="mb-4"
+                    // value={newComment}
+                    // onChange={(e) => setNewComment(e.target.value)}
+                    className="border border-neutral-200 rounded-lg p-6 mb-4 block w-full"
                   />
-                  <Button disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit Comment"}
-                  </Button>
+                  <Button type="submit">Submit Comment</Button>
                 </form>
-              </CardContent>
-            </Card> */}
+            </div>
 
             {/* Comments List */}
             <div className="mt-8">
